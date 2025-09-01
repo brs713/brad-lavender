@@ -252,6 +252,17 @@ body {
     border-left: 4px solid #667eea;
 }
 
+.job-description {
+    font-style: italic;
+    color: #555;
+    background: #f0f8ff;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     body {
