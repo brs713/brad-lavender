@@ -7,13 +7,13 @@
 
 ## Professional Summary
 
-Full-Stack C# & golang Developer with 8+ years' experience, strong database skills (SQL & MongoDB) & DevOps knowledge. Currently specializing in DevOps practices with Azure cloud services, CI/CD automation, and infrastructure monitoring.
+DevOps, Platform Engineering & Infra as Code IT professional with 8+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React.
 
 ---
 
 ## Technology Summary
 
-C#, golang, Java, SQL, mongodb, javascript, Docker, k8s, Jenkins, Kafka, React, CSS, HTML, Azure, Azure DevOps, Datadog, Elastic, Pulumi
+C#, golang, Java, SQL, mongodb, javascript, Docker, k8s, Jenkins, Kafka, React, CSS, HTML, Azure, Azure DevOps, Datadog, Elastic, Pulumi, PowerShell, Postman, Swagger, Prometheus, Grafana
 
 ---
 
