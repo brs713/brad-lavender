@@ -1,7 +1,6 @@
 # Brad Lavender
 
-**Email:** brs713@gmail.com  
-**Phone:** (314) 600-6220
+**Email:** brs713@gmail.com
 
 ---
 
