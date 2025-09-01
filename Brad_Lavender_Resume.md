@@ -7,19 +7,31 @@
 
 ## Professional Summary
 
-Full-Stack C# & golang Developer with 4 years' experience, strong db skills (SQL & mongo) & devops knowledge
+Full-Stack C# & golang Developer with 8+ years' experience, strong database skills (SQL & MongoDB) & DevOps knowledge. Currently specializing in DevOps practices with Azure cloud services, CI/CD automation, and infrastructure monitoring.
 
 ---
 
 ## Technology Summary
 
-C#, golang, Java, SQL, mongodb, javascript, Docker, k8s, Jenkins, Kafka, React, CSS, HTML
+C#, golang, Java, SQL, mongodb, javascript, Docker, k8s, Jenkins, Kafka, React, CSS, HTML, Azure, Azure DevOps, Datadog, Elastic, Pulumi
 
 ---
 
 ## Career History
 
-### **Centene** | February 2020 – Present
+### **Hunter Engineering Co** | July 2021 – Present
+**DevOps Developer**
+
+- Working with Azure DevOps for CI/CD pipeline management and automation
+- Utilizing Azure cloud services for infrastructure and application deployment
+- Implementing monitoring and observability solutions with Datadog
+- Managing logging and search capabilities with Elastic
+- Infrastructure as Code implementation using Pulumi
+- Supporting DevOps practices and methodologies across development teams
+
+---
+
+### **Centene** | February 2020 – July 2021
 **Application Software Developer**
 
 - Developed back-end APIs in golang in CI/CD environment porting information from SQL to mongodb
