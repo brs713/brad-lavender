@@ -69,4 +69,3 @@ The website includes specific print styles for professional resume printing:
 
 **Contact Information:**
 - Email: brs713@gmail.com
-- Phone: (314) 600-6220
