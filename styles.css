@@ -343,3 +343,8 @@ body {
 }
 
 /* Print styles have been moved to print/print.css. */
+
+/* Hide injected print DOM only when viewing on screen; allow print/print.css (media=print) to show it in Print Preview */
+@media screen {
+    #print-root { display: none !important; }
+}

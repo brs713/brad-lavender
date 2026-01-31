@@ -83,7 +83,81 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         printBtn.addEventListener('click', function() {
-            window.print();
+            // Inject print DOM and stylesheet, then call print (no iframe)
+            var cleanup = function(){
+                try{ window.removeEventListener('afterprint', afterPrint); }catch(e){}
+                var tmp = document.getElementById('print-temp'); if(tmp) tmp.parentNode.removeChild(tmp);
+                var css = document.getElementById('print-css-temp'); if(css) css.parentNode.removeChild(css);
+            };
+
+            var afterPrint = function(){ cleanup(); };
+
+            var doPrint = function(){
+                // create container (insert at top so it prints first)
+                var container = document.getElementById('print-root');
+                if(!container){ container = document.createElement('div'); container.id = 'print-root'; document.body.insertBefore(container, document.body.firstChild); }
+                // ensure print css is loaded (media=print)
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'print/print.css';
+                // set to 'all' immediately to force the browser to load and apply rules so print preview picks them up.
+                // The print DOM is hidden on-screen via @media screen in styles.css, so this won't flash visible content.
+                link.media = 'all';
+                link.id = 'print-css-temp';
+                document.head.appendChild(link);
+
+                // helper to detect stylesheet applied (works in many browsers)
+                var cssLoaded = function(cb){
+                    // onload is supported in modern browsers for <link>
+                    var done = false;
+                    link.onload = function(){ if(done) return; done = true; cb(); };
+                    // fallback: poll for stylesheet rules (may throw on cross-origin; here same-origin)
+                    var attempts = 0;
+                    var poll = setInterval(function(){
+                        attempts++;
+                        try{
+                            if(link.sheet && link.sheet.cssRules && link.sheet.cssRules.length){ clearInterval(poll); if(done) return; done = true; cb(); }
+                        }catch(e){ /* ignore - access not ready yet */ }
+                        if(attempts > 50){ clearInterval(poll); if(done) return; done = true; cb(); }
+                    }, 50);
+                    // extra safety: if neither fires, call cb after 2s
+                    setTimeout(function(){ if(done) return; done = true; try{ if(link.sheet && !link.sheet.cssRules){ /* nothing */ } }catch(e){} cb(); }, 2000);
+                };
+
+                // render into container using print renderer, but wait until CSS is applied
+                cssLoaded(function(){
+                    // We already set media='all' above to force application. Remember original target media so we can restore.
+                    var originalMedia = 'print';
+
+                    var runRender = function(){
+                        try{
+                            if(window.renderPrintInto){
+                                window.renderPrintInto(container, window.RESUME_DATA);
+                                afterRender();
+                            } else {
+                                // load print-render.js dynamically then render
+                                var s = document.createElement('script'); s.src = 'print/print-render.js';
+                                s.onload = function(){ try{ window.renderPrintInto(container, window.RESUME_DATA); }catch(e){ console.error(e); } finally{ afterRender(); } };
+                                document.body.appendChild(s);
+                            }
+                        }catch(err){ console.error('Render failed', err); afterRender(); }
+                    };
+
+                    var afterRender = function(){
+                        // restore media back to print after a short delay so the link stays print-only for subsequent operations
+                        setTimeout(function(){ try{ link.media = originalMedia; }catch(e){} }, 400);
+                        try{ window.addEventListener('afterprint', afterPrint); }catch(e){}
+                        // give the renderer a moment then call print
+                        setTimeout(function(){ window.print(); }, 160);
+                        // fallback cleanup
+                        setTimeout(cleanup, 5000);
+                    };
+
+                    runRender();
+                });
+            };
+
+            doPrint();
         });
         
         header.appendChild(printBtn);
