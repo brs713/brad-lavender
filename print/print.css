@@ -1,0 +1,21 @@
+/* Print-only stylesheet for a concise resume */
+body { font-family: 'Inter', sans-serif; color: #000; margin: 0; padding: 0.6in; }
+#pr-root, #print-root { max-width: 800px; margin: 0 auto; }
+.print-header { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.2in; }
+.ph-left { width: 62%; }
+.ph-right { width: 36%; white-space: nowrap; }
+.ph-left h1 { font-size: 18pt; margin: 0 0 0.05in 0; }
+.pr-contact { font-size: 9pt; margin-bottom: 0.05in; }
+.pr-summary { font-size: 10pt; margin: 0 0 0.08in 0; }
+.tech-cat { margin-bottom: 0.06in; }
+.tech-cat h4 { font-size: 10pt; margin: 0 0 0.02in 0; }
+.pr-tags { font-size: 9pt; }
+.pr-tag { margin-right: 0.2rem; }
+.pr-career { margin-top: 0.08in; }
+.pr-job { margin-bottom: 0.12in; }
+.pr-job-h { display: flex; justify-content: space-between; }
+.pr-job-title { font-weight: 600; }
+.pr-job-date { font-size: 9pt; }
+.pr-job-desc { font-size: 10pt; margin: 0.05in 0; }
+.pr-achs { margin: 0; padding-left: 1rem; }
+.pr-personal { margin-top: 0.08in; }
