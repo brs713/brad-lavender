@@ -1,67 +1,75 @@
-// Render the TECH_DATA into the hidden header container only when printing
+// Print renderer: builds a two-column print layout with main content (left) and tech sidebar (right)
 (function(){
-    function buildTechNode(item) {
-        var cat = document.createElement('div');
-        cat.className = 'tech-category';
-        var h3 = document.createElement('h3');
-        h3.textContent = item.title;
-        cat.appendChild(h3);
-        var tagsWrap = document.createElement('div');
-        tagsWrap.className = 'tech-tags';
-        item.tags.forEach(function(tag){
-            var s = document.createElement('span');
-            s.className = 'tech-tag';
-            s.textContent = tag;
-            tagsWrap.appendChild(s);
+    function el(tag, cls){ var e = document.createElement(tag); if(cls) e.className = cls; return e; }
+
+    function buildHeader(left){
+        var h = el('header','pr-header');
+        var name = el('h1','pr-name'); name.textContent = left.header.name; h.appendChild(name);
+        var contact = el('div','pr-contact'); contact.textContent = left.header.email; h.appendChild(contact);
+        var summary = el('p','pr-summary'); summary.textContent = left.professionalSummary; h.appendChild(summary);
+        return h;
+    }
+
+    function buildCareerSection(career){
+        var sec = el('section','pr-career');
+        career.forEach(function(job){
+            var j = el('div','pr-job');
+            var h = el('div','pr-job-h');
+            var t = el('div','pr-job-title'); t.textContent = job.title + ' — ' + job.company; h.appendChild(t);
+            var d = el('div','pr-job-date'); d.textContent = job.date; h.appendChild(d);
+            j.appendChild(h);
+            var desc = el('p','pr-job-desc'); desc.textContent = job.description; j.appendChild(desc);
+            if(job.achievements && job.achievements.length){
+                var ul = el('ul','pr-achs'); job.achievements.forEach(function(a){ var li = el('li'); li.textContent = a; ul.appendChild(li); }); j.appendChild(ul);
+            }
+            sec.appendChild(j);
         });
-        cat.appendChild(tagsWrap);
-        return cat;
+        return sec;
     }
 
-    function renderPrintHeader() {
-        var container = document.getElementById('print-header-tech');
-        if(!container || !window.TECH_DATA) return;
-        // clear
-        container.innerHTML = '';
-        window.TECH_DATA.forEach(function(item){
-            container.appendChild(buildTechNode(item));
+    function buildPersonal(personal){
+        var sec = el('section','pr-personal');
+        var h = el('h3'); h.textContent = 'Personal Interests'; sec.appendChild(h);
+        var wrap = el('div','pr-tags'); personal.forEach(function(t){ var s = el('span','pr-tag'); s.textContent = t; wrap.appendChild(s); });
+        sec.appendChild(wrap);
+        return sec;
+    }
+
+    function buildSidebar(tech){
+        var aside = el('aside','pl-side');
+        tech.forEach(function(cat){
+            var c = el('div','side-cat');
+            var h = el('h4'); h.textContent = cat.title; c.appendChild(h);
+            var ul = el('ul'); cat.tags.forEach(function(t){ var li = el('li'); li.textContent = t; ul.appendChild(li); });
+            c.appendChild(ul);
+            aside.appendChild(c);
         });
-        container.style.display = '';
+        return aside;
     }
 
-    function clearPrintHeader() {
-        var container = document.getElementById('print-header-tech');
-        if(!container) return;
-        container.style.display = 'none';
+    function buildInto(container, data){
         container.innerHTML = '';
+        var layout = el('div','print-layout');
+        var main = el('main','pl-main');
+        var side = buildSidebar(data.technologySummary || []);
+
+        main.appendChild(buildHeader(data));
+        main.appendChild(buildCareerSection(data.career || []));
+        main.appendChild(buildPersonal(data.personalInterests || []));
+
+        layout.appendChild(main);
+        layout.appendChild(side);
+        container.appendChild(layout);
     }
 
-    // Bind for browsers that support beforeprint/afterprint
-    if ('onbeforeprint' in window) {
-        window.onbeforeprint = renderPrintHeader;
-        window.onafterprint = clearPrintHeader;
-    } else {
-        // Fallback: use matchMedia
-        var mql = window.matchMedia && window.matchMedia('print');
-        if (mql && mql.addListener) {
-            mql.addListener(function(m){
-                if(m.matches) renderPrintHeader(); else clearPrintHeader();
-            });
-        }
-    }
-
-    // Also render just before window.print() if triggered via script
-    // (some browsers don't fire beforeprint reliably)
-    var origPrint = window.print;
-    window.print = function(){
-        try{ renderPrintHeader(); }catch(e){}
-        setTimeout(function(){ origPrint.call(window); }, 20);
+    // expose function for embedding render into other pages
+    window.renderPrintInto = function(container, data){
+        buildInto(container, data || window.RESUME_DATA || {});
     };
 
-    // Render now on DOMContentLoaded so print preview sees content even if beforeprint isn't fired immediately
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', renderPrintHeader);
-    } else {
-        try{ renderPrintHeader(); }catch(e){}
+    // Standalone behavior when loaded directly (print/print.html)
+    if(document.getElementById('print-root')){
+        if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ window.renderPrintInto(document.getElementById('print-root'), window.RESUME_DATA); });
+        else window.renderPrintInto(document.getElementById('print-root'), window.RESUME_DATA);
     }
 })();
