@@ -147,6 +147,25 @@ body {
     gap: 0.5rem;
 }
 
+/* Center tags for Personal Interests only */
+.personal-interests .tech-grid {
+    justify-items: center;
+}
+
+.personal-interests .tech-category {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* keep heading left-aligned */
+}
+
+.personal-interests .tech-category h3 {
+    text-align: left;
+}
+
+.personal-interests .tech-tags {
+    justify-content: center; /* center the tag chips only */
+}
+
 .tech-tag {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
