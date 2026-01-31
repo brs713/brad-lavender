@@ -2,12 +2,24 @@
 (function(){
     function el(tag, cls){ var e = document.createElement(tag); if(cls) e.className = cls; return e; }
 
-    function buildHeader(left){
+    function buildHeader(data){
+        // top header row: name (left) and contact (right)
         var h = el('header','pr-header');
-        var name = el('h1','pr-name'); name.textContent = left.header.name; h.appendChild(name);
-        var contact = el('div','pr-contact'); contact.textContent = left.header.email; h.appendChild(contact);
-        var summary = el('p','pr-summary'); summary.textContent = left.professionalSummary; h.appendChild(summary);
+        var left = el('div','pr-header-left');
+        var name = el('h1','pr-name'); name.textContent = (data && data.header && data.header.name) || '';
+        left.appendChild(name);
+        var right = el('div','pr-header-right');
+        var contact = el('div','pr-contact'); contact.textContent = (data && data.header && data.header.email) || '';
+        right.appendChild(contact);
+        h.appendChild(left);
+        h.appendChild(right);
         return h;
+    }
+
+    function buildSummary(data){
+        var summary = el('p','pr-summary');
+        summary.textContent = (data && data.professionalSummary) || '';
+        return summary;
     }
 
     function buildCareerSection(career){
@@ -37,28 +49,49 @@
 
     function buildSidebar(tech){
         var aside = el('aside','pl-side');
+        // inner container holds content offset from the separator
+        var inner = el('div','pl-side-inner');
+        // overall sidebar title
+        var sideTitle = el('h3','tech-summary-title'); sideTitle.textContent = 'Tech Summary'; inner.appendChild(sideTitle);
         tech.forEach(function(cat){
             var c = el('div','side-cat');
             var h = el('h4'); h.textContent = cat.title; c.appendChild(h);
-            var ul = el('ul'); cat.tags.forEach(function(t){ var li = el('li'); li.textContent = t; ul.appendChild(li); });
+            var ul = el('ul'); cat.tags.forEach(function(t){ var li = el('li'); var b = el('span','manual-bullet'); b.textContent = '•'; var txt = el('span','manual-text'); txt.textContent = t; li.appendChild(b); li.appendChild(txt); ul.appendChild(li); });
             c.appendChild(ul);
-            aside.appendChild(c);
+            inner.appendChild(c);
         });
+        aside.appendChild(inner);
         return aside;
     }
 
     function buildInto(container, data){
         container.innerHTML = '';
         var layout = el('div','print-layout');
+
+        // Header spans full width
+        layout.appendChild(buildHeader(data));
+        // add summary under header
+        layout.appendChild(buildSummary(data));
+
+        var columns = el('div','pr-columns');
         var main = el('main','pl-main');
         var side = buildSidebar(data.technologySummary || []);
 
-        main.appendChild(buildHeader(data));
-        main.appendChild(buildCareerSection(data.career || []));
-        main.appendChild(buildPersonal(data.personalInterests || []));
+    main.appendChild(buildCareerSection(data.career || []));
 
-        layout.appendChild(main);
-        layout.appendChild(side);
+    columns.appendChild(main);
+    // insert a real DOM separator so the vertical bar prints reliably across browsers
+    var sep = el('div','pl-sep');
+    columns.appendChild(sep);
+    columns.appendChild(side);
+
+        layout.appendChild(columns);
+
+        // Personal interests should use full page width below the columns
+        if(data && data.personalInterests && data.personalInterests.length){
+            layout.appendChild(buildPersonal(data.personalInterests));
+        }
+
         container.appendChild(layout);
     }
 
