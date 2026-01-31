@@ -5,17 +5,59 @@ window.RESUME_DATA = {
     email: 'brs713@gmail.com'
   },
   professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a myriad IT disciplines. Skills built on full-stack background with heavy reliance on PowerShell, C#, golang & React. Leverages agentic AI tools & prompt engineering to enhance productivity and problem-solving capabilities.",
+  
+
+  // Single source of truth for Technology Summary and roles (moved here so there is only one data file)
   technologySummary: [
-  { title: 'DevOps & Cloud', tags: ['Azure DevOps','Azure','Docker','Kubernetes','Jenkins','Kafka'] },
-    { title: 'Infrastructure as Code', tags: ['Pulumi','Terraform','Azure ARM / Bicep'] },
-    { title: 'AI & Automation', tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development'] },
-    { title: 'Languages', tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React'] },
-    { title: 'Databases', tags: ['SQL','MongoDB'] },
-    { title: 'Monitoring & Logging', tags: ['Datadog','Elastic','Prometheus','Grafana'] },
-    { title: 'Version Control', tags: ['git','HG (Mercurial)'] },
-    { title: 'Tools & Testing', tags: ['Postman','Swagger','SonarQube','QwietAI'] },
-    { title: 'API Architecture', tags: ['REST','GraphQL','GRPC'] }
+    {
+        title: 'DevOps & Cloud',
+        tags: ['Docker','Kubernetes','Jenkins','Kafka','Azure','Azure DevOps','Pulumi']
+    },
+    {
+        title: 'Infrastructure as Code',
+        tags: ['Pulumi','Terraform','Azure ARM / Bicep']
+    },
+    {
+        title: 'AI & Automation',
+        tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development']
+    },
+    {
+        title: 'Languages',
+        tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React']
+    },
+    {
+        title: 'Databases',
+        tags: ['SQL','MongoDB']
+    },
+    {
+        title: 'Monitoring & Logging',
+        tags: ['Datadog','Elastic','Prometheus','Grafana']
+    },
+    {
+        title: 'Version Control',
+        tags: ['git','HG (Mercurial)']
+    },
+    {
+        title: 'Tools & Testing',
+        tags: ['Postman','Swagger','SonarQube','QwietAI']
+    },
+    {
+        title: 'API Architecture',
+        tags: ['REST','GraphQL','GRPC']
+    }
   ],
+
+  // Roles mapping for specific technologies (print renderer will use this if present)
+  techRoles: {
+    'Azure DevOps': 'Admin',
+    'Pulumi': 'Admin',
+    'Datadog': 'Admin',
+    'Elastic': 'Admin',
+    'Postman': 'Admin',
+    'SonarQube': 'Admin',
+    'QwietAI': 'Admin',
+    'Azure': 'Subscription Owner'
+  },
   career: [
     {
       title: 'DevOps Developer',
