@@ -344,29 +344,161 @@ body {
 
 /* Print Styles */
 @media print {
+    /* Make a compact, print-friendly resume layout */
     body {
         background: white;
         padding: 0;
+        color: #000;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 
     .container {
         box-shadow: none;
         border-radius: 0;
+        max-width: 100%;
+        margin: 0;
+        padding: 0.6in;
+        background: transparent;
     }
 
+    /* Header becomes compact and left-aligned for print */
     .header {
-        background: #2c3e50 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: none !important;
+        color: #000;
+        padding: 0.1in 0;
+        text-align: left;
     }
 
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .name {
+        font-size: 18pt;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+    .contact-info {
+        justify-content: flex-end;
+        font-size: 9pt;
+    }
+
+    /* Tighten spacing and font sizes */
+    .section {
+        padding: 0.08in 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .section-title {
+        font-size: 11pt;
+        margin-bottom: 0.08in;
+    }
+
+    .summary-text,
+    .job-description {
+        font-size: 10pt;
+        color: #000;
+        background: none;
+        border-left: none;
+        padding: 0;
+        margin-bottom: 0.08in;
+        font-style: normal;
+    }
+
+    .job {
+        padding: 0.06in 0;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .job-title {
+        font-size: 11pt;
+        margin-bottom: 0;
+    }
+
+    .company {
+        font-size: 10.5pt;
+        color: #000;
+        font-weight: 600;
+    }
+
+    .job-date {
+        font-size: 9.5pt;
+        color: #333;
+        white-space: nowrap;
+        margin-left: auto;
+    }
+
+    /* Make tech categories compact for print: two-column-ish flow */
+    .tech-grid {
+        display: block;
+    }
+
+    .tech-category {
+        display: inline-block;
+        width: 48%;
+        vertical-align: top;
+        margin-bottom: 0.08in;
+    }
+
+    .tech-category h3 {
+        font-size: 10pt;
+        margin-bottom: 0.04in;
+    }
+
+    .tech-tags {
+        display: inline;
+    }
+
+    /* Render tags as plain inline text with commas for print */
     .tech-tag {
-        background: #667eea !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: none !important;
+        color: #000 !important;
+        padding: 0;
+        border-radius: 0;
+        font-weight: 400;
+        font-size: 9.5pt;
+        margin-right: 0.2rem;
+        display: inline;
     }
 
-    .job:hover {
+    .tech-tag::after {
+        content: ", ";
+    }
+
+    .tech-tag:last-child::after {
+        content: "";
+    }
+
+    .achievements,
+    .tech-details,
+    .method-details {
+        padding-left: 1rem;
+        font-size: 10pt;
+        margin-bottom: 0.04in;
+    }
+
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    /* Remove hover effects in print */
+    .job:hover,
+    .tech-tag:hover {
         transform: none;
         box-shadow: none;
     }
