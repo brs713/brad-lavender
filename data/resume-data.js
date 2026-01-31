@@ -4,9 +4,9 @@ window.RESUME_DATA = {
     name: 'Brad Lavender',
     email: 'brs713@gmail.com'
   },
-  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages AI tools, agentic GitHub Copilot, and prompt engineering to enhance productivity and problem-solving capabilities.",
+  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a myriad IT disciplines. Skills built on full-stack background with heavy reliance on PowerShell, C#, golang & React. Leverages agentic AI tools & prompt engineering to enhance productivity and problem-solving capabilities.",
   technologySummary: [
-  { title: 'DevOps & Cloud', tags: ['Docker','Kubernetes','Jenkins','Kafka','Azure','Azure DevOps'] },
+  { title: 'DevOps & Cloud', tags: ['Azure DevOps','Azure','Docker','Kubernetes','Jenkins','Kafka'] },
     { title: 'Infrastructure as Code', tags: ['Pulumi','Terraform','Azure ARM / Bicep'] },
     { title: 'AI & Automation', tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development'] },
     { title: 'Languages', tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React'] },
