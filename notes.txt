@@ -1,0 +1,39 @@
+
+Oversee on Prem IIS services 
+Handle software packages like we maintain the servers including the SDKS and dotnet runtimes
+
+How we built Azure DevOps pipelines migrating from UI releases to yaml templates
+
+Migrating on Prem services to the cloud 
+	Azure permissions 
+	Azure service bus 
+	Rabbit MQ elastic both sunset 
+	Adoption of datadog, Azure cloud, ASB for eventing, pulumi IaC
+	
+Liasion between Infrastructure & Development teams
+Utilize architectural knowledge, detail-oriented mindset, strong communication skills, autonomy to provide solutions to development challenges before or when they're needed 
+Own: deployment, deployment targets (onPrem & Cloud), Cloud permissions, Eventing, Observability/Monitoring/Alerting
+Administer:  Code Analysis (Quality & Security), Postman, documentation, standardization
+
+ADOS
+Pulumi
+Azure
+SonarQube - Server & Cloud
+QwietAI
+Postman
+
+
+
+hobbies - parenting, combat robotics, mechanical keyboards, DIY/making, 3d printing, 3d modeling, woodworking, rock climbing, slacklining,  disc golf
+
+
+
+
+
+Azure DevOps for CI/CD pipeline management and automation
+Azure cloud services for infrastructure and application deployment
+Datadog for monitoring and observability solutions
+Elastic for logging and search capabilities
+Pulumi for Infrastructure as Code implementation
+
+
