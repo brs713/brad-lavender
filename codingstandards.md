@@ -23,4 +23,9 @@
 	- Files/locations to be changed (use `path/to/file`).
 	- One-line success criteria.
 
+6. Repository hygiene
+- Before adding new data files, or duplicating data, search the project to confirm no existing source of truth exists.
+- Avoid duplicating data across files. If a single source of truth exists (for example `data/resume-data.js`), add changes there instead of creating additional files.
+- When introducing new data or functionality, include a brief note in the todo list stating where related data already lives or why a new file is required.
+
 
