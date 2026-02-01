@@ -68,8 +68,7 @@ window.RESUME_DATA = {
         'Azure DevOps for CI/CD pipeline management and automation',
         'Azure cloud services for infrastructure and application deployment',
         'Datadog for monitoring and observability solutions',
-        'Elastic for logging and search capabilities',
-        //'Pulumi for Infrastructure as Code implementation'
+        'Pulumi for Infrastructure as Code implementation'
       ],
       achievements: [
         'Providing DevOps practices and methodologies across development teams',

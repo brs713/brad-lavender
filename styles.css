@@ -282,6 +282,19 @@ body {
     line-height: 1.6;
 }
 
+/* Exit explanation: single-line reason for leaving a role */
+.exit-explanation {
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
+    color: #6b7280; /* muted slate */
+    font-style: italic;
+    background: #fbfbfc;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    border-left: 3px solid #a78bfa; /* lighter accent */
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     body {
