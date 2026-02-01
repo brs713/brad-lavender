@@ -53,10 +53,34 @@
         var inner = el('div','pl-side-inner');
         // overall sidebar title
         var sideTitle = el('h3','tech-summary-title'); sideTitle.textContent = 'Tech Summary'; inner.appendChild(sideTitle);
-        tech.forEach(function(cat){
+    // allow roles to be supplied either via the legacy window.TECH_ROLES or the centralized RESUME_DATA.techRoles
+    var rolesMap = window.TECH_ROLES || (window.RESUME_DATA && window.RESUME_DATA.techRoles) || {};
+
+    tech.forEach(function(cat){
             var c = el('div','side-cat');
             var h = el('h4'); h.textContent = cat.title; c.appendChild(h);
-            var ul = el('ul'); cat.tags.forEach(function(t){ var li = el('li'); var b = el('span','manual-bullet'); b.textContent = '•'; var txt = el('span','manual-text'); txt.textContent = t; li.appendChild(b); li.appendChild(txt); ul.appendChild(li); });
+                var ul = el('ul'); cat.tags.forEach(function(t){
+                    var li = el('li');
+                    var b = el('span','manual-bullet'); b.textContent = '\u2022';
+                    var txt = el('span','manual-text'); txt.textContent = t;
+                    li.appendChild(b);
+                    li.appendChild(txt);
+
+                    // If a roles map exists on the window, and has an entry for this tag, render it.
+                    // The role element will be styled to appear italicized and preceded by a separator when it can sit on the same line.
+                    if(rolesMap && rolesMap[t]){
+                            var roleWrap = el('span','tech-role-wrap');
+                            // separator text uses non-breaking spaces around the hyphen to help keep it with the role when possible
+                            var sep = el('span','tech-role-sep'); sep.textContent = '  -  ';
+                            var role = el('span','tech-role'); role.textContent = rolesMap[t];
+                            roleWrap.appendChild(sep);
+                            roleWrap.appendChild(role);
+                            // append role to the list item; li is positioned relative so inline absolute positioning won't expand column width
+                            li.appendChild(roleWrap);
+                        }
+
+                    ul.appendChild(li);
+                });
             c.appendChild(ul);
             inner.appendChild(c);
         });
@@ -93,6 +117,33 @@
         }
 
         container.appendChild(layout);
+        // After layout is attached to DOM, adjust any role elements that wrapped to the next line.
+        // When a role wraps, we remove the separator and display the role on its own indented line.
+        setTimeout(function(){
+            try{
+                var side = container.querySelector('.pl-side');
+                if(side){
+                    var items = side.querySelectorAll('.side-cat li');
+                    items.forEach(function(li){
+                        var txt = li.querySelector('.manual-text');
+                        var roleWrap = li.querySelector('.tech-role-wrap');
+                        if(txt && roleWrap){
+                                    var txtRect = txt.getBoundingClientRect();
+                                    var roleRect = roleWrap.getBoundingClientRect();
+                                    // If the top of the role is lower than the top of the text, it wrapped to the next line.
+                                    if(roleRect.top > txtRect.top + 1){
+                                        var sep = roleWrap.querySelector('.tech-role-sep');
+                                        if(sep) sep.textContent = '';
+                                        roleWrap.classList.add('tech-role-wrapped');
+                                    } else {
+                                        // If role sits on the same line, mark it inline so CSS can absolutely position it
+                                        roleWrap.classList.add('tech-role-inline');
+                                    }
+                                }
+                    });
+                }
+            }catch(e){ /* ignore measurement errors */ }
+        }, 0);
     }
 
     // expose function for embedding render into other pages
