@@ -4,33 +4,37 @@ window.RESUME_DATA = {
     name: 'Brad Lavender',
     email: 'brs713@gmail.com'
   },
-  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a myriad IT disciplines. Skills built on full-stack background with heavy reliance on PowerShell, C#, golang & React. Leverages agentic AI tools & prompt engineering to enhance productivity and problem-solving capabilities.",
-  
+  // Section titles moved from index.html to the single source of truth
+  titles: {
+    professionalSummary: 'Professional Summary',
+    technologySummary: 'Technology Summary',
+    careerHistory: 'Career History',
+    personalInterests: 'Personal Interests'
+  },
 
+  
   // Single source of truth for Technology Summary and roles (moved here so there is only one data file)
   technologySummary: [
-    { title: 'DevOps & Cloud', tags: ['Azure DevOps','Azure','Docker','Kubernetes','Jenkins','Kafka'] },
-    { title: 'Infrastructure as Code', tags: ['Pulumi','Terraform','Azure ARM / Bicep'] },
-    { title: 'AI & Automation', tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development'] },
-    { title: 'Languages', tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React'] },
-    { title: 'Databases', tags: ['SQL','MongoDB'] },
-    { title: 'Monitoring & Logging', tags: ['Datadog','Elastic','Prometheus','Grafana'] },
-    { title: 'Version Control', tags: ['git','HG (Mercurial)'] },
-    { title: 'Tools & Testing', tags: ['Postman','Swagger','SonarQube','QwietAI'] },
-    { title: 'API Architecture', tags: ['REST','GraphQL','GRPC'] }
+    {
+      title: 'DevOps & Cloud',
+      tags: [
+        { name: 'Azure DevOps', role: 'Admin' },
+        { name: 'Azure', role: 'Subscription Owner' },
+        { name: 'Docker' },
+        { name: 'Kubernetes' },
+        { name: 'Jenkins' },
+        { name: 'Kafka' }
+      ]
+    },
+    { title: 'Infrastructure as Code', tags: [ { name: 'Pulumi', role: 'Admin' }, { name: 'Terraform' }, { name: 'Azure ARM / Bicep' } ] },
+    { title: 'AI & Automation', tags: [ { name: 'GitHub Copilot' }, { name: 'Prompt Engineering' }, { name: 'AI-Assisted Development' } ] },
+    { title: 'Languages', tags: [ { name: 'C#' }, { name: 'Golang' }, { name: 'Java' }, { name: 'js/ts' }, { name: 'PowerShell' }, { name: 'HTML' }, { name: 'CSS' }, { name: 'React' } ] },
+    { title: 'Databases', tags: [ { name: 'SQL' }, { name: 'MongoDB' } ] },
+    { title: 'Monitoring & Logging', tags: [ { name: 'Datadog', role: 'Admin' }, { name: 'Elastic', role: 'Admin' }, { name: 'Prometheus' }, { name: 'Grafana' } ] },
+    { title: 'Version Control', tags: [ { name: 'git' }, { name: 'HG (Mercurial)' } ] },
+    { title: 'Tools & Testing', tags: [ { name: 'Postman', role: 'Admin' }, { name: 'Swagger' }, { name: 'SonarQube', role: 'Admin' }, { name: 'QwietAI', role: 'Admin' } ] },
+    { title: 'API Architecture', tags: [ { name: 'REST' }, { name: 'GraphQL' }, { name: 'GRPC' } ] }
   ],
-
-  // Roles mapping for specific technologies (print renderer will use this if present)
-  techRoles: {
-    'Azure DevOps': 'Admin',
-    'Pulumi': 'Admin',
-    'Datadog': 'Admin',
-    'Elastic': 'Admin',
-    'Postman': 'Admin',
-    'SonarQube': 'Admin',
-    'QwietAI': 'Admin',
-    'Azure': 'Subscription Owner'
-  },
   career: [
     {
       title: 'DevOps Developer',
