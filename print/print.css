@@ -41,7 +41,7 @@
 .manual-text { display: inline-block; position: relative; padding-right: 0; white-space: normal; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
 
 /* Role metadata rendered after tag names in the print sidebar */
-.pr-role { font-style: italic; margin-left: 0.25rem; color: rgba(0,0,0,0.8); font-size: 8pt; }
+.pr-role { font-style: italic; margin-left: 0.5rem; color: rgba(0,0,0,0.8); font-size: 8pt; }
 
 
 /* Career and job styles */
@@ -51,13 +51,34 @@
 .pr-job-h { display: flex; justify-content: space-between; }
 .pr-job-title { font-weight: 600; }
 .pr-job-date { font-size: 8.5pt; }
-.pr-job-desc { font-size: 9pt; margin: 0.03in 0; font-style: italic; }
+.pr-job-desc { font-size: 10pt; margin: 0.03in 0; font-style: italic; }
 
 /* keep default break behavior (removed forced break-avoid rules) */
 .pr-achs { margin: 0; padding-left: 1rem; }
 .pr-personal { margin-top: 0.12in; width: 100%; display: block; }
 
-/* Personal Interests: full-width tag chips */
-.pr-personal .pr-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
-.pr-personal .pr-tag { display: inline-block; padding: 0.18rem 0.45rem; background: rgba(0,0,0,0.04); border-radius: 6px; font-size: 8.5pt; line-height: 1.2; }
+	/* Personal Interests: centered grid, 5 items per row, near-full column width */
+	.pr-personal .pr-tags {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 0.5rem;
+		margin-top: 0.35rem;
+		width: 95%;
+		margin-left: auto;
+		margin-right: auto;
+		justify-items: center;
+		align-items: center;
+	}
+	.pr-personal .pr-tag {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		text-align: center;
+		padding: 0.22rem 0.4rem;
+		background: rgba(0,0,0,0.04);
+		border-radius: 6px;
+		font-size: 12pt;
+		line-height: 1.25;
+		overflow-wrap: anywhere;
+	}
 
