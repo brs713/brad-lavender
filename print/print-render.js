@@ -45,8 +45,14 @@
 
     function buildPersonal(personal){
         var sec = el('section','pr-personal');
-        var h = el('h3'); h.textContent = 'Personal Interests'; sec.appendChild(h);
-        var wrap = el('div','pr-tags'); personal.forEach(function(t){ var s = el('span','pr-tag'); s.textContent = t; wrap.appendChild(s); });
+        var title = 'Personal Interests';
+        var items = personal || [];
+        var intro = '';
+        if(personal && personal.titleText) title = personal.titleText;
+        if(personal && Array.isArray(personal.items)) { items = personal.items; intro = personal.intro || ''; }
+        var h = el('h3'); h.textContent = title; sec.appendChild(h);
+        if(intro) sec.appendChild(el('p','pr-personal-intro')).textContent = intro;
+        var wrap = el('div','pr-tags'); items.forEach(function(t){ var s = el('span','pr-tag'); s.textContent = t; wrap.appendChild(s); });
         sec.appendChild(wrap);
         return sec;
     }
@@ -119,7 +125,12 @@
         else if(tech && Array.isArray(tech.categories)) techForSidebar = tech.categories;
         var side = buildSidebar(techForSidebar);
 
-    main.appendChild(buildCareerSection(data.career || []));
+    // support career as legacy array or new object { titleText, items }
+    var careerData = data && data.career;
+    var careerForRender = [];
+    if(Array.isArray(careerData)) careerForRender = careerData;
+    else if(careerData && Array.isArray(careerData.items)) careerForRender = careerData.items;
+    main.appendChild(buildCareerSection(careerForRender || []));
 
     columns.appendChild(main);
     // insert a real DOM separator so the vertical bar prints reliably across browsers
@@ -130,8 +141,11 @@
         layout.appendChild(columns);
 
         // Personal interests should use full page width below the columns
-        if(data && data.personalInterests && data.personalInterests.length){
-            layout.appendChild(buildPersonal(data.personalInterests));
+        if(data){
+            var personal = data.personalInterests || data.personalInterestsIntro || [];
+            // If old shape (intro + array) exists, prefer new object
+            if(data.personalInterests && Array.isArray(data.personalInterests)) personal = data.personalInterests;
+            layout.appendChild(buildPersonal(personal));
         }
 
         container.appendChild(layout);

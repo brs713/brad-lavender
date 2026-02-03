@@ -34,9 +34,40 @@
   }
 
   function fillCareer(){
-    var careerSection = document.querySelector('.section .section-content');
-    // We won't rebuild entire page to avoid breaking layout; only ensure existing career sections are present.
+    var careerSection = document.querySelectorAll('.section');
+    // Find the Career section title in the page and update it if data provides a titleText
+    var careerData = window.RESUME_DATA && window.RESUME_DATA.career;
+    var titleText = null;
+    if(Array.isArray(careerData)) titleText = null; // legacy array has no titleText
+    else if(careerData && careerData.titleText) titleText = careerData.titleText;
+    if(titleText){
+      // find the section whose h2 text currently contains 'Career' (best-effort) and update it
+      var sections = document.querySelectorAll('section');
+      sections.forEach(function(sec){
+        var h2 = sec.querySelector('.section-title');
+        if(h2 && /career/i.test(h2.textContent)) h2.textContent = titleText;
+      });
+    }
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ fillHeader(); fillTechSummary(); }); else { fillHeader(); fillTechSummary(); }
+  function fillPersonalInterests(){
+    var data = window.RESUME_DATA || {};
+    var personal = data.personalInterests;
+    var container = document.querySelector('.personal-interests .section-content');
+    if(!container) return;
+    var titleEl = document.querySelector('.personal-interests .section-title');
+    if(personal){
+      if(typeof personal === 'object' && Array.isArray(personal.items)){
+        if(titleEl && personal.titleText) titleEl.textContent = personal.titleText;
+        if(personal.intro){ var p = container.querySelector('.job-description'); if(p) p.textContent = personal.intro; }
+        var wrap = container.querySelector('.tech-grid .tech-category .tech-tags');
+        if(!wrap){ // fallback: find any tech-tags container
+          wrap = container.querySelector('.tech-grid .tech-tags');
+        }
+        if(wrap){ wrap.innerHTML = ''; personal.items.forEach(function(t){ var s=document.createElement('span'); s.className='tech-tag'; s.textContent=t; wrap.appendChild(s); }); }
+      }
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); }); else { fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); }
 })();
