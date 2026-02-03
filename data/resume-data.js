@@ -1,36 +1,28 @@
-// Single source of truth for the resume content (works over file://)
 window.RESUME_DATA = {
   header: {
     name: 'Brad Lavender',
     email: 'brs713@gmail.com'
   },
-  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages AI tools, agentic GitHub Copilot, and prompt engineering to enhance productivity and problem-solving capabilities.",
-  
-
-  // Single source of truth for Technology Summary and roles (moved here so there is only one data file)
-  technologySummary: [
-    { title: 'DevOps & Cloud', tags: ['Azure DevOps','Azure','Docker','Kubernetes','Jenkins','Kafka'] },
-    { title: 'Infrastructure as Code', tags: ['Pulumi','Terraform','Azure ARM / Bicep'] },
-    { title: 'AI & Automation', tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development'] },
-    { title: 'Languages', tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React'] },
-    { title: 'Databases', tags: ['SQL','MongoDB'] },
-    { title: 'Monitoring & Logging', tags: ['Datadog','Elastic','Prometheus','Grafana'] },
-    { title: 'Version Control', tags: ['git','HG (Mercurial)'] },
-    { title: 'Tools & Testing', tags: ['Postman','Swagger','SonarQube','QwietAI'] },
-    { title: 'API Architecture', tags: ['REST','GraphQL','GRPC'] }
-  ],
-
-  // Roles mapping for specific technologies (print renderer will use this if present)
-  techRoles: {
-    'Azure DevOps': 'Admin',
-    'Pulumi': 'Admin',
-    'Datadog': 'Admin',
-    'Elastic': 'Admin',
-    'Postman': 'Admin',
-    'SonarQube': 'Admin',
-    'QwietAI': 'Admin',
-    'Azure': 'Subscription Owner'
+  professionalSummary: {
+    titleText: 'Professional Summary',
+    text: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages AI tools, agentic GitHub Copilot, and prompt engineering to enhance productivity and problem-solving capabilities."
   },
+  
+  technologySummary: {
+    titleText: 'Technology Summary',
+    categories: [
+  { title: 'DevOps & Cloud', tags: [ { name: 'Azure DevOps', role: 'Admin' }, { name: 'Azure', role: 'Subscription Owner' }, 'Docker','Kubernetes','Jenkins','Kafka' ] },
+  { title: 'Infrastructure as Code', tags: [ { name: 'Pulumi', role: 'Admin' }, 'Terraform','Azure ARM / Bicep' ] },
+      { title: 'AI & Automation', tags: ['GitHub Copilot','Prompt Engineering','AI-Assisted Development'] },
+      { title: 'Languages', tags: ['C#','Golang','Java','js/ts','PowerShell','HTML','CSS','React'] },
+      { title: 'Databases', tags: ['SQL','MongoDB'] },
+  { title: 'Monitoring & Logging', tags: [ { name: 'Datadog', role: 'Admin' }, { name: 'Elastic', role: 'Admin' }, 'Prometheus','Grafana' ] },
+      { title: 'Version Control', tags: ['git','HG (Mercurial)'] },
+  { title: 'Tools & Testing', tags: [ { name: 'Postman', role: 'Admin' }, 'Swagger', { name: 'SonarQube', role: 'Admin' }, { name: 'QwietAI', role: 'Admin' } ] },
+      { title: 'API Architecture', tags: ['REST','GraphQL','GRPC'] }
+    ],
+  },
+
   career: [
     {
       title: 'DevOps Developer',
@@ -105,6 +97,7 @@ window.RESUME_DATA = {
       exitExplanation: 'I left to head to the next progression in my career - to advance skills.'
     }
   ],
+  
   personalInterestsIntro: 'Outside of work I enjoy a variety of hands-on and outdoor activities that keep me creative and problem-solving:',
   personalInterests: ['Parenting','Combat robotics','Mechanical keyboards','DIY / making','3D printing','3D modeling','Woodworking','Rock climbing','Slacklining','Disc golf']
 };

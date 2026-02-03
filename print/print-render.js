@@ -18,7 +18,11 @@
 
     function buildSummary(data){
         var summary = el('p','pr-summary');
-        summary.textContent = (data && data.professionalSummary) || '';
+        // professionalSummary may be a string (legacy) or an object with text + titleText
+        var ps = (data && data.professionalSummary);
+        if(typeof ps === 'string') summary.textContent = ps;
+        else if(ps && ps.text) summary.textContent = ps.text;
+        else summary.textContent = '';
         return summary;
     }
 
@@ -51,10 +55,13 @@
         var aside = el('aside','pl-side');
         // inner container holds content offset from the separator
         var inner = el('div','pl-side-inner');
-        // overall sidebar title
-        var sideTitle = el('h3','tech-summary-title'); sideTitle.textContent = 'Tech Summary'; inner.appendChild(sideTitle);
-    // allow roles to be supplied either via the legacy window.TECH_ROLES or the centralized RESUME_DATA.techRoles
-    var rolesMap = window.TECH_ROLES || (window.RESUME_DATA && window.RESUME_DATA.techRoles) || {};
+        // overall sidebar title - prefer title from data when available
+        var sideTitle = el('h3','tech-summary-title');
+        var titleFromData = (window.RESUME_DATA && window.RESUME_DATA.technologySummary && window.RESUME_DATA.technologySummary.titleText) ||
+                            (window.RESUME_DATA && window.RESUME_DATA.sectionTitles && window.RESUME_DATA.sectionTitles.technologySummary);
+        sideTitle.textContent = titleFromData || 'Tech Summary'; inner.appendChild(sideTitle);
+    // allow legacy roles map via window.TECH_ROLES or window.RESUME_DATA.techRoles, but prefer per-tag role embedded in the tag objects
+    var legacyRolesMap = window.TECH_ROLES || (window.RESUME_DATA && window.RESUME_DATA.techRoles) || {};
 
     tech.forEach(function(cat){
             var c = el('div','side-cat');
@@ -62,22 +69,28 @@
                 var ul = el('ul'); cat.tags.forEach(function(t){
                     var li = el('li');
                     var b = el('span','manual-bullet'); b.textContent = '\u2022';
-                    var txt = el('span','manual-text'); txt.textContent = t;
+                    var txt = el('span','manual-text');
+                    var tagName = '';
+                    var roleForTag = null;
+                    if(typeof t === 'string'){
+                        tagName = t;
+                        roleForTag = legacyRolesMap[t] || null;
+                    } else if(t && typeof t === 'object'){
+                        tagName = t.name || '';
+                        roleForTag = t.role || legacyRolesMap[t.name] || null;
+                    }
+                    txt.textContent = tagName;
                     li.appendChild(b);
                     li.appendChild(txt);
 
-                    // If a roles map exists on the window, and has an entry for this tag, render it.
-                    // The role element will be styled to appear italicized and preceded by a separator when it can sit on the same line.
-                    if(rolesMap && rolesMap[t]){
-                            var roleWrap = el('span','tech-role-wrap');
-                            // separator text uses non-breaking spaces around the hyphen to help keep it with the role when possible
-                            var sep = el('span','tech-role-sep'); sep.textContent = '  -  ';
-                            var role = el('span','tech-role'); role.textContent = rolesMap[t];
-                            roleWrap.appendChild(sep);
-                            roleWrap.appendChild(role);
-                            // append role to the list item; li is positioned relative so inline absolute positioning won't expand column width
-                            li.appendChild(roleWrap);
-                        }
+                    if(roleForTag){
+                        var roleWrap = el('span','tech-role-wrap');
+                        var sep = el('span','tech-role-sep'); sep.textContent = '  -  ';
+                        var role = el('span','tech-role'); role.textContent = roleForTag;
+                        roleWrap.appendChild(sep);
+                        roleWrap.appendChild(role);
+                        li.appendChild(roleWrap);
+                    }
 
                     ul.appendChild(li);
                 });
@@ -99,7 +112,12 @@
 
         var columns = el('div','pr-columns');
         var main = el('main','pl-main');
-        var side = buildSidebar(data.technologySummary || []);
+        // technologySummary may be an array (legacy) or an object with titleText + categories
+        var tech = data && data.technologySummary;
+        var techForSidebar = [];
+        if(Array.isArray(tech)) techForSidebar = tech;
+        else if(tech && Array.isArray(tech.categories)) techForSidebar = tech.categories;
+        var side = buildSidebar(techForSidebar);
 
     main.appendChild(buildCareerSection(data.career || []));
 

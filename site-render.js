@@ -4,13 +4,26 @@
     if(!window.RESUME_DATA) return;
     var name = document.querySelector('.name'); if(name) name.textContent = window.RESUME_DATA.header.name;
     var email = document.querySelector('.contact-item a'); if(email) email.textContent = window.RESUME_DATA.header.email; if(email) email.href = 'mailto:'+window.RESUME_DATA.header.email;
-    var summary = document.querySelector('.section .summary-text'); if(summary) summary.textContent = window.RESUME_DATA.professionalSummary;
+    var summary = document.querySelector('.section .summary-text');
+    if(summary){
+      // Support both legacy string and new object shape
+      var ps = window.RESUME_DATA.professionalSummary;
+      if(typeof ps === 'string') summary.textContent = ps;
+      else if(ps && ps.text) summary.textContent = ps.text;
+      else summary.textContent = '';
+    }
   }
 
   function fillTechSummary(){
     var grid = document.querySelector('.section .tech-grid'); if(!grid) return;
     grid.innerHTML = '';
-    (window.RESUME_DATA.technologySummary||[]).forEach(function(cat){
+    // Support new object shape with titleText + categories, or legacy array.
+    var tech = window.RESUME_DATA.technologySummary || [];
+    var categories = [];
+    if(Array.isArray(tech)) categories = tech; // legacy
+    else if(tech && Array.isArray(tech.categories)) categories = tech.categories; // new
+
+    categories.forEach(function(cat){
       var div = document.createElement('div'); div.className='tech-category';
       var h = document.createElement('h3'); h.textContent = cat.title; div.appendChild(h);
       var tags = document.createElement('div'); tags.className='tech-tags';
