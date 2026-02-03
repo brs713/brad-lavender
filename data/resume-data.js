@@ -4,7 +4,7 @@ window.RESUME_DATA = {
     name: 'Brad Lavender',
     email: 'brs713@gmail.com'
   },
-  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a myriad IT disciplines. Skills built on full-stack background with heavy reliance on PowerShell, C#, golang & React. Leverages agentic AI tools & prompt engineering to enhance productivity and problem-solving capabilities.",
+  professionalSummary: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages AI tools, agentic GitHub Copilot, and prompt engineering to enhance productivity and problem-solving capabilities.",
   
 
   // Single source of truth for Technology Summary and roles (moved here so there is only one data file)
@@ -49,6 +49,8 @@ window.RESUME_DATA = {
         'Automating infrastructure provisioning and deployment processes',
         'Optimizing cloud resource utilization and cost management'
       ]
+      ,
+      exitExplanation: 'I left an unhealthy development environment to shift my role to DevOps and gain breadth of knowledge.'
     },
     {
       title: 'Application Software Developer',
@@ -99,7 +101,10 @@ window.RESUME_DATA = {
         'Learned some basics of DevOps - HAProxy, load balancing, what happens during a deployment',
         'Explored adapting TDD methodologies into existing development practices'
       ]
+      ,
+      exitExplanation: 'I left to head to the next progression in my career - to advance skills.'
     }
   ],
-  personalInterests: ['Parenting','Combat robotics','Mechanical keyboards','DIY / making','3D printing & 3D modeling','Woodworking','Rock climbing','Slacklining','Disc golf']
+  personalInterestsIntro: 'Outside of work I enjoy a variety of hands-on and outdoor activities that keep me creative and problem-solving:',
+  personalInterests: ['Parenting','Combat robotics','Mechanical keyboards','DIY / making','3D printing','3D modeling','Woodworking','Rock climbing','Slacklining','Disc golf']
 };
