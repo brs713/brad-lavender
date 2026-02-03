@@ -8,7 +8,7 @@ window.RESUME_DATA = {
   },
   professionalSummary: {
     titleText: 'Professional Summary',
-    text: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages AI tools, agentic GitHub Copilot, and prompt engineering to enhance productivity and problem-solving capabilities."
+    text: "DevOps, Platform Engineering & Infra as Code IT professional with 9+ years of experience and broad skillsets utilizing a variety of tech tools. Skills built on a full-stack background with heavy reliance on C#, golang & React. Leverages agentic AI & prompt engineering to enhance productivity and problem-solving capabilities."
   },
 
   technologySummary: {
