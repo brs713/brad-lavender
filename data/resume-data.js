@@ -30,7 +30,7 @@ window.RESUME_DATA = {
         title: 'DevOps Developer',
         company: 'Hunter Engineering Co',
         date: 'July 2021 - Now',
-        description: "At Hunter, DevOps is IT for IT. Essentially, we work for the Enterprise Architect to solution anything that anyone doesn't know how to do. We hold the keys to many kingdoms and use them to solve problems. It's 60% Platform Engineering, 35% Developer Support & 5% SRE.",
+        description: "At Hunter, DevOps is IT for IT. Essentially, we work for the Enterprise Architect to solution anything that anyone doesn't know how to do. We hold the keys to many kingdoms and use them to solve problems. It's 60% Platform Engineering, 25% Developer Support & 15% SRE.",
         tech_stack: [
           'Azure DevOps for CI/CD pipeline management and automation',
           'Azure cloud services for infrastructure and application deployment',
