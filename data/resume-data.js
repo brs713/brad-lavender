@@ -38,10 +38,10 @@ window.RESUME_DATA = {
           'Pulumi for Infrastructure as Code implementation'
         ],
         achievements: [
-          'Providing DevOps practices and methodologies across development teams',
-          'Implementing comprehensive monitoring and alerting strategies',
-          'Automating infrastructure provisioning and deployment processes',
-          'Optimizing cloud resource utilization and cost management'
+          { label: null, text: 'Providing DevOps practices and methodologies across development teams' },
+          { label: null, text: 'Implementing comprehensive monitoring and alerting strategies' },
+          { label: null, text: 'Automating infrastructure provisioning and deployment processes' },
+          { label: null, text: 'Optimizing cloud resource utilization and cost management' }
         ],
         exitExplanation: 'I left an unhealthy development environment to shift my role to DevOps and gain breadth of knowledge.'
       },
@@ -57,13 +57,13 @@ window.RESUME_DATA = {
           'Software: VS Code, IntelliJ, SSMS, Studio3T, Postman, Rancher, kubectl, docker, CloudBees, Jenkins, Kibana, Grafana, git, BitBucket, SourceTree'
         ],
         achievements: [
-          'Assimilated Golang, MongoDB, DevOps concepts & learned a variety of new software to start working tickets independently within 2 months',
-          'Served as point of contact for external reporting team\'s data target migration from SQL to mongo collections',
-          'Developed back-end APIs in Golang in CI/CD environment porting information via Kafka from SQL to MongoDB',
-          'Navigated enormous monolithic corporate environment with many small teams',
-          'Supported Prod API consumers and served as point of contact for teams publishing data sources & Kafka topics',
-          'Tuned existing stored procedures for team\'s APIs',
-          'Audited indexes used in mongo collections'
+          { label: 'Ach', text: 'Assimilated Golang, MongoDB, DevOps concepts & learned a variety of new software to start working tickets independently within 2 months' },
+          { label: 'Ach', text: 'Served as point of contact for external reporting team\'s data target migration from SQL to mongo collections' },
+          { label: 'Job', text: 'Developed back-end APIs in Golang in CI/CD environment porting information via Kafka from SQL to MongoDB' },
+          { label: 'Job', text: 'Navigated enormous monolithic corporate environment with many small teams' },
+          { label: 'Job', text: 'Supported Prod API consumers and served as point of contact for teams publishing data sources & Kafka topics' },
+          { label: 'Job', text: 'Tuned existing stored procedures for team\'s APIs' },
+          { label: 'Job', text: 'Audited indexes used in mongo collections' }
         ]
       },
       {
@@ -81,18 +81,18 @@ window.RESUME_DATA = {
           'Heavy use of Chrome DevTools'
         ],
         achievements: [
-          'Wrote the first React project for the company',
-          'Implemented & supported promotional pages - from single page, 1/2 day projects to $250K multi-month projects',
-          "Data-modeling & organizational planning around Account Department driven business rules",
-          'Matching Creative department mock-ups across responsive breakpoints for the front end',
-          'Polishing page behavior or data submission as needed with TypeScript or vanilla JS',
-          'Handled Reporting - from single-use throw-away scripts to programmatically controlled multi-page daily reports',
-          'Dealt with 29 different CultureCodes in a responsive design environment',
-          'Created, maintained & supported MVC systems',
-          'Developed new & utilized existing APIs',
-          'Created, updated, indexed SQL tables',
-          'Learned some basics of DevOps - HAProxy, load balancing, what happens during a deployment',
-          'Explored adapting TDD methodologies into existing development practices'
+          { label: 'Ach', text: 'Wrote the first React project for the company' },
+          { label: 'Ach', text: 'Implemented & supported promotional pages - from single page, 1/2 day projects to $250K multi-month projects' },
+          { label: 'Job', text: 'Data-modeling & organizational planning around Account Department driven business rules' },
+          { label: 'Job', text: 'Matching Creative department mock-ups across responsive breakpoints for the front end' },
+          { label: 'Job', text: 'Polishing page behavior or data submission as needed with TypeScript or vanilla JS' },
+          { label: 'Job', text: 'Handled Reporting - from single-use throw-away scripts to programmatically controlled multi-page daily reports' },
+          { label: 'Job', text: 'Dealt with 29 different CultureCodes in a responsive design environment' },
+          { label: 'Skl', text: 'Created, maintained & supported MVC systems' },
+          { label: 'Skl', text: 'Developed new & utilized existing APIs' },
+          { label: 'Skl', text: 'Created, updated, indexed SQL tables' },
+          { label: 'Kno', text: 'Learned some basics of DevOps - HAProxy, load balancing, what happens during a deployment' },
+          { label: 'Kno', text: 'Explored adapting TDD methodologies into existing development practices' }
         ],
         exitExplanation: 'I left to head to the next progression in my career - to advance skills.'
       }

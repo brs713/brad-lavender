@@ -36,7 +36,18 @@
             j.appendChild(h);
             var desc = el('p','pr-job-desc'); desc.textContent = job.description; j.appendChild(desc);
             if(job.achievements && job.achievements.length){
-                var ul = el('ul','pr-achs'); job.achievements.forEach(function(a){ var li = el('li'); li.textContent = a; ul.appendChild(li); }); j.appendChild(ul);
+                var ul = el('ul','pr-achs');
+                job.achievements.forEach(function(a){
+                    var li = el('li');
+                    if(typeof a === 'string'){
+                        li.textContent = a;
+                    } else if(a && typeof a === 'object'){
+                        if(a.label){ var strong = el('strong'); strong.textContent = a.label + ':  '; li.appendChild(strong); }
+                        li.appendChild(document.createTextNode(a.text || ''));
+                    }
+                    ul.appendChild(li);
+                });
+                j.appendChild(ul);
             }
             sec.appendChild(j);
         });

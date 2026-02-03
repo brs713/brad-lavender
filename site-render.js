@@ -69,5 +69,30 @@
     }
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); }); else { fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); }
+  function renderAchievements(container, achievements){
+    if(!container) return;
+    container.innerHTML = '';
+    (achievements||[]).forEach(function(a){
+      var li = document.createElement('li');
+      if(typeof a === 'string'){
+        li.textContent = a;
+      } else if(a && typeof a === 'object'){
+        if(a.label){ var strong = document.createElement('strong'); strong.textContent = a.label + ':  '; li.appendChild(strong); }
+        var txt = document.createTextNode(a.text || ''); li.appendChild(txt);
+      }
+      container.appendChild(li);
+    });
+  }
+
+  function injectAchievements(){
+    var career = window.RESUME_DATA && window.RESUME_DATA.career && window.RESUME_DATA.career.items ? window.RESUME_DATA.career.items : (Array.isArray(window.RESUME_DATA.career) ? window.RESUME_DATA.career : []);
+    var jobEls = document.querySelectorAll('.job');
+    jobEls.forEach(function(el, idx){
+      var achUl = el.querySelector('.achievements');
+      var dataAch = (career[idx] && career[idx].achievements) || [];
+      renderAchievements(achUl, dataAch);
+    });
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); injectAchievements(); }); else { fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); injectAchievements(); }
 })();
