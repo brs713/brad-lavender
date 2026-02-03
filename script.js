@@ -53,10 +53,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add print functionality
     const addPrintButton = () => {
-        const header = document.querySelector('.header-content');
-        const printBtn = document.createElement('button');
-        printBtn.innerHTML = '<i class="fas fa-print"></i> Print Resume';
-        printBtn.className = 'print-btn';
+        var attempts = 0;
+        var maxAttempts = 20;
+        var interval = 100; // ms
+        var tryAppend = function(){
+            attempts++;
+            const header = document.querySelector('.header-content');
+            if(!header){
+                if(attempts < maxAttempts) return setTimeout(tryAppend, interval);
+                return; // give up quietly
+            }
+            const printBtn = document.createElement('button');
+            var label = (window.RESUME_DATA && window.RESUME_DATA.ui && window.RESUME_DATA.ui.printButtonLabel) || 'Print Resume';
+            printBtn.innerHTML = '<i class="fas fa-print"></i> ' + label;
+            printBtn.className = 'print-btn';
         printBtn.style.cssText = `
             background: rgba(255,255,255,0.2);
             color: white;
@@ -160,8 +170,10 @@ document.addEventListener('DOMContentLoaded', function() {
             doPrint();
         });
         
-        header.appendChild(printBtn);
-    };
+            header.appendChild(printBtn);
+            }; // end tryAppend
+            tryAppend();
+        }; // end addPrintButton
 
     addPrintButton();
 

@@ -1,98 +1,179 @@
-(function(){
-  // Populate existing index.html containers from RESUME_DATA
-  function fillHeader(){
-    if(!window.RESUME_DATA) return;
-    var name = document.querySelector('.name'); if(name) name.textContent = window.RESUME_DATA.header.name;
-    var email = document.querySelector('.contact-item a'); if(email) email.textContent = window.RESUME_DATA.header.email; if(email) email.href = 'mailto:'+window.RESUME_DATA.header.email;
-    var summary = document.querySelector('.section .summary-text');
-    if(summary){
-      // Support both legacy string and new object shape
-      var ps = window.RESUME_DATA.professionalSummary;
-      if(typeof ps === 'string') summary.textContent = ps;
-      else if(ps && ps.text) summary.textContent = ps.text;
-      else summary.textContent = '';
+/*
+  site-render.js
+  Clean renderer: build the resume DOM entirely from window.RESUME_DATA.
+*/
+/*
+  site-render.js
+  Clean renderer: build the resume DOM entirely from window.RESUME_DATA.
+*/
+(function () {
+  'use strict';
+
+  function el(tag, className, text) {
+    var n = document.createElement(tag);
+    if (className) n.className = className;
+    if (text !== undefined && text !== null) n.textContent = String(text);
+    return n;
+  }
+
+  function setTitle() {
+    if (window.RESUME_DATA && window.RESUME_DATA.header && window.RESUME_DATA.header.name) {
+      var title = window.RESUME_DATA.header.name;
+      if (window.RESUME_DATA.header.title) title += ' - ' + window.RESUME_DATA.header.title;
+      document.title = title;
     }
   }
 
-  function fillTechSummary(){
-    var grid = document.querySelector('.section .tech-grid'); if(!grid) return;
-    grid.innerHTML = '';
-    // Support new object shape with titleText + categories, or legacy array.
-    var tech = window.RESUME_DATA.technologySummary || [];
-    var categories = [];
-    if(Array.isArray(tech)) categories = tech; // legacy
-    else if(tech && Array.isArray(tech.categories)) categories = tech.categories; // new
-
-    categories.forEach(function(cat){
-      var div = document.createElement('div'); div.className='tech-category';
-      var h = document.createElement('h3'); h.textContent = cat.title; div.appendChild(h);
-      var tags = document.createElement('div'); tags.className='tech-tags';
-      (cat.tags||[]).forEach(function(t){ var s=document.createElement('span'); s.className='tech-tag'; s.textContent=t; tags.appendChild(s); });
-      div.appendChild(tags);
-      grid.appendChild(div);
-    });
+  function renderHeader(data) {
+    var header = el('header', 'header');
+    var hc = el('div', 'header-content');
+    var left = el('div', 'header-left');
+    left.appendChild(el('h1', 'name', (data.header && data.header.name) || ''));
+    if (data.header && data.header.email) {
+      var contact = el('div', 'contact-info');
+      var item = el('div', 'contact-item');
+      var icon = document.createElement('i');
+      icon.className = 'fas fa-envelope';
+      var a = el('a', '', data.header.email);
+      a.href = 'mailto:' + data.header.email;
+      item.appendChild(icon);
+      item.appendChild(a);
+      contact.appendChild(item);
+      left.appendChild(contact);
+    }
+    hc.appendChild(left);
+    var right = el('div', 'header-right');
+    right.id = 'print-header-tech';
+    hc.appendChild(right);
+    header.appendChild(hc);
+    return header;
   }
 
-  function fillCareer(){
-    var careerSection = document.querySelectorAll('.section');
-    // Find the Career section title in the page and update it if data provides a titleText
-    var careerData = window.RESUME_DATA && window.RESUME_DATA.career;
-    var titleText = null;
-    if(Array.isArray(careerData)) titleText = null; // legacy array has no titleText
-    else if(careerData && careerData.titleText) titleText = careerData.titleText;
-    if(titleText){
-      // find the section whose h2 text currently contains 'Career' (best-effort) and update it
-      var sections = document.querySelectorAll('section');
-      sections.forEach(function(sec){
-        var h2 = sec.querySelector('.section-title');
-        if(h2 && /career/i.test(h2.textContent)) h2.textContent = titleText;
+  function renderSection(title) {
+    var s = el('section', 'section');
+    s.appendChild(el('h2', 'section-title', title || ''));
+    s.appendChild(el('div', 'section-content'));
+    return { section: s, content: s.querySelector('.section-content') };
+  }
+
+  function renderProfessionalSummary(data) {
+    var ps = data.professionalSummary || {};
+    var block = renderSection(ps.titleText || 'Professional Summary');
+    block.content.appendChild(el('p', 'summary-text', typeof ps === 'string' ? ps : ps.text || ''));
+    return block.section;
+  }
+
+  function renderTechSummary(data) {
+    var ts = data.technologySummary || {};
+    var block = renderSection(ts.titleText || 'Technology Summary');
+    var grid = el('div', 'tech-grid');
+    var categories = Array.isArray(ts) ? ts : ts.categories || [];
+    categories.forEach(function (cat) {
+      var c = el('div', 'tech-category');
+      c.appendChild(el('h3', '', cat.title || cat.name || ''));
+      var tags = el('div', 'tech-tags');
+      (cat.tags || []).forEach(function (t) {
+        var tagText = typeof t === 'string' ? t : (t && t.name) || '';
+        tags.appendChild(el('span', 'tech-tag', tagText));
       });
-    }
+      c.appendChild(tags);
+      grid.appendChild(c);
+    });
+    block.content.appendChild(grid);
+    return block.section;
   }
 
-  function fillPersonalInterests(){
-    var data = window.RESUME_DATA || {};
-    var personal = data.personalInterests;
-    var container = document.querySelector('.personal-interests .section-content');
-    if(!container) return;
-    var titleEl = document.querySelector('.personal-interests .section-title');
-    if(personal){
-      if(typeof personal === 'object' && Array.isArray(personal.items)){
-        if(titleEl && personal.titleText) titleEl.textContent = personal.titleText;
-        if(personal.intro){ var p = container.querySelector('.job-description'); if(p) p.textContent = personal.intro; }
-        var wrap = container.querySelector('.tech-grid .tech-category .tech-tags');
-        if(!wrap){ // fallback: find any tech-tags container
-          wrap = container.querySelector('.tech-grid .tech-tags');
+  function renderCareer(data) {
+    var career = data.career || {};
+    var block = renderSection(career.titleText || 'Career History');
+    var container = el('div', 'section-content');
+    (career.items || []).forEach(function (item) {
+      var job = el('div', 'job');
+      var header = el('div', 'job-header');
+      var jc = el('div', 'job-title-company');
+      jc.appendChild(el('h3', 'job-title', item.title || ''));
+      jc.appendChild(el('h4', 'company', item.company || ''));
+      header.appendChild(jc);
+      header.appendChild(el('div', 'job-date', item.date || ''));
+      job.appendChild(header);
+      var content = el('div', 'job-content');
+      content.appendChild(el('p', 'job-description', item.description || ''));
+
+      if (item.tech_stack && item.tech_stack.length) {
+        var tswrap = el('div', 'tech-stack');
+        tswrap.appendChild(el('h5', '', 'Tech Stack:'));
+        var ul = el('ul', 'tech-details');
+        item.tech_stack.forEach(function (t) { ul.appendChild(el('li', '', t)); });
+        tswrap.appendChild(ul);
+        content.appendChild(tswrap);
+      }
+
+      var ach = el('ul', 'achievements');
+      (item.achievements || []).forEach(function (a) {
+        var li = el('li');
+        if (typeof a === 'string') li.textContent = a;
+        else if (a && typeof a === 'object') {
+          if (a.label) li.appendChild(el('strong', '', a.label + ':  '));
+          li.appendChild(document.createTextNode(a.text || ''));
         }
-        if(wrap){ wrap.innerHTML = ''; personal.items.forEach(function(t){ var s=document.createElement('span'); s.className='tech-tag'; s.textContent=t; wrap.appendChild(s); }); }
-      }
-    }
-  }
-
-  function renderAchievements(container, achievements){
-    if(!container) return;
-    container.innerHTML = '';
-    (achievements||[]).forEach(function(a){
-      var li = document.createElement('li');
-      if(typeof a === 'string'){
-        li.textContent = a;
-      } else if(a && typeof a === 'object'){
-        if(a.label){ var strong = document.createElement('strong'); strong.textContent = a.label + ':  '; li.appendChild(strong); }
-        var txt = document.createTextNode(a.text || ''); li.appendChild(txt);
-      }
-      container.appendChild(li);
+        ach.appendChild(li);
+      });
+      content.appendChild(ach);
+      if (item.exitExplanation) content.appendChild(el('p', 'exit-explanation', item.exitExplanation));
+      job.appendChild(content);
+      container.appendChild(job);
     });
+    // replace default content with generated container
+    block.section.removeChild(block.section.querySelector('.section-content'));
+    block.section.appendChild(container);
+    return block.section;
   }
 
-  function injectAchievements(){
-    var career = window.RESUME_DATA && window.RESUME_DATA.career && window.RESUME_DATA.career.items ? window.RESUME_DATA.career.items : (Array.isArray(window.RESUME_DATA.career) ? window.RESUME_DATA.career : []);
-    var jobEls = document.querySelectorAll('.job');
-    jobEls.forEach(function(el, idx){
-      var achUl = el.querySelector('.achievements');
-      var dataAch = (career[idx] && career[idx].achievements) || [];
-      renderAchievements(achUl, dataAch);
-    });
+  function renderPersonalInterests(data) {
+    var pi = data.personalInterests || {};
+    var block = renderSection(pi.titleText || 'Personal Interests');
+    var content = el('div', 'section-content');
+    if (pi.intro) content.appendChild(el('p', 'job-description', pi.intro));
+    var grid = el('div', 'tech-grid');
+    var cat = el('div', 'tech-category');
+    cat.appendChild(el('h3', 'company', 'Hobbies'));
+    var tags = el('div', 'tech-tags');
+    (pi.items || []).forEach(function (i) { tags.appendChild(el('span', 'tech-tag', i)); });
+    cat.appendChild(tags);
+    grid.appendChild(cat);
+    content.appendChild(grid);
+    block.section.appendChild(content);
+    return block.section;
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); injectAchievements(); }); else { fillHeader(); fillTechSummary(); fillCareer(); fillPersonalInterests(); injectAchievements(); }
-})();
+  function renderRoot(data) {
+    var root = document.getElementById('resume-root');
+    if (!root) root = document.body;
+    root.innerHTML = '';
+    var container = el('div', 'container');
+    container.appendChild(renderHeader(data));
+    container.appendChild(renderProfessionalSummary(data));
+    container.appendChild(renderTechSummary(data));
+    container.appendChild(renderCareer(data));
+    container.appendChild(renderPersonalInterests(data));
+    root.appendChild(container);
+  }
+
+  function bootstrap() {
+    if (!window.RESUME_DATA) return;
+    setTitle();
+    renderRoot(window.RESUME_DATA);
+    // expose helpers for print renderer
+    window.getResumeData = function () { return window.RESUME_DATA; };
+    window.renderPrintInto = function (container/*, data */) {
+      container.innerHTML = '';
+      var clone = document.getElementById('resume-root') ? document.getElementById('resume-root').cloneNode(true) : document.body.cloneNode(true);
+      var btns = clone.querySelectorAll('.print-btn');
+      btns.forEach(function (b) { if (b.parentNode) b.parentNode.removeChild(b); });
+      container.appendChild(clone);
+    };
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootstrap); else bootstrap();
+
+}());
