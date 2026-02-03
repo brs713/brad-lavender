@@ -118,10 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // helper to detect stylesheet applied (works in many browsers)
                 var cssLoaded = function(cb){
-                    // onload is supported in modern browsers for <link>
                     var done = false;
                     link.onload = function(){ if(done) return; done = true; cb(); };
-                    // fallback: poll for stylesheet rules (may throw on cross-origin; here same-origin)
                     var attempts = 0;
                     var poll = setInterval(function(){
                         attempts++;
@@ -130,40 +128,32 @@ document.addEventListener('DOMContentLoaded', function() {
                         }catch(e){ /* ignore - access not ready yet */ }
                         if(attempts > 50){ clearInterval(poll); if(done) return; done = true; cb(); }
                     }, 50);
-                    // extra safety: if neither fires, call cb after 2s
-                    setTimeout(function(){ if(done) return; done = true; try{ if(link.sheet && !link.sheet.cssRules){ /* nothing */ } }catch(e){} cb(); }, 2000);
+                    setTimeout(function(){ if(done) return; done = true; cb(); }, 2000);
                 };
 
-                // render into container using print renderer, but wait until CSS is applied
+                // Always use the print-specific renderer. Keep the print stylesheet media='all'
+                // so the print rules are active during preview/printing. Cleanup occurs afterprint.
                 cssLoaded(function(){
-                    // We already set media='all' above to force application. Remember original target media so we can restore.
-                    var originalMedia = 'print';
-
-                    var runRender = function(){
-                        try{
-                            if(window.renderPrintInto){
-                                window.renderPrintInto(container, window.RESUME_DATA);
-                                afterRender();
-                            } else {
-                                // load print-render.js dynamically then render
-                                var s = document.createElement('script'); s.src = 'print/print-render.js';
-                                s.onload = function(){ try{ window.renderPrintInto(container, window.RESUME_DATA); }catch(e){ console.error(e); } finally{ afterRender(); } };
-                                document.body.appendChild(s);
+                    try{
+                        var s = document.createElement('script');
+                        s.src = 'print/print-render.js';
+                        s.onload = function(){
+                            try{ if(window.renderPrintInto) window.renderPrintInto(container, window.RESUME_DATA); }
+                            catch(e){ console.error('print render error', e); }
+                            finally{
+                                try{ window.addEventListener('afterprint', afterPrint); }catch(e){}
+                                setTimeout(function(){ window.print(); }, 200);
+                                setTimeout(cleanup, 6000);
                             }
-                        }catch(err){ console.error('Render failed', err); afterRender(); }
-                    };
-
-                    var afterRender = function(){
-                        // restore media back to print after a short delay so the link stays print-only for subsequent operations
-                        setTimeout(function(){ try{ link.media = originalMedia; }catch(e){} }, 400);
-                        try{ window.addEventListener('afterprint', afterPrint); }catch(e){}
-                        // give the renderer a moment then call print
-                        setTimeout(function(){ window.print(); }, 160);
-                        // fallback cleanup
-                        setTimeout(cleanup, 5000);
-                    };
-
-                    runRender();
+                        };
+                        s.onerror = function(){
+                            console.error('Failed to load print renderer');
+                            try{ window.addEventListener('afterprint', afterPrint); }catch(e){}
+                            setTimeout(function(){ window.print(); }, 200);
+                            setTimeout(cleanup, 6000);
+                        };
+                        document.body.appendChild(s);
+                    }catch(err){ console.error('Render failed', err); try{ window.addEventListener('afterprint', afterPrint); }catch(e){} setTimeout(function(){ window.print(); }, 200); setTimeout(cleanup, 6000); }
                 });
             };
 

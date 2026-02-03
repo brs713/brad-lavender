@@ -31,24 +31,32 @@
         career.forEach(function(job){
             var j = el('div','pr-job');
             var h = el('div','pr-job-h');
-            var t = el('div','pr-job-title'); t.textContent = job.title + ' — ' + job.company; h.appendChild(t);
+            var t = el('div','pr-job-title'); t.textContent = job.title + ' \u2014 ' + job.company; h.appendChild(t);
             var d = el('div','pr-job-date'); d.textContent = job.date; h.appendChild(d);
             j.appendChild(h);
             var desc = el('p','pr-job-desc'); desc.textContent = job.description; j.appendChild(desc);
+
+            // Build achievements list but do NOT render any 'label' properties from the data.
+            // Also avoid creating empty <ul> or <li> elements when there is no text.
             if(job.achievements && job.achievements.length){
                 var ul = el('ul','pr-achs');
                 job.achievements.forEach(function(a){
-                    var li = el('li');
+                    var text = '';
                     if(typeof a === 'string'){
-                        li.textContent = a;
+                        text = a;
                     } else if(a && typeof a === 'object'){
-                        if(a.label){ var strong = el('strong'); strong.textContent = a.label + ':  '; li.appendChild(strong); }
-                        li.appendChild(document.createTextNode(a.text || ''));
+                        // intentionally ignore a.label per print-only requirement; use only a.text
+                        text = a.text || '';
                     }
-                    ul.appendChild(li);
+                    if(text && String(text).trim()){
+                        var li = el('li');
+                        li.textContent = text;
+                        ul.appendChild(li);
+                    }
                 });
-                j.appendChild(ul);
+                if(ul.children.length) j.appendChild(ul);
             }
+
             sec.appendChild(j);
         });
         return sec;
@@ -77,38 +85,24 @@
         var titleFromData = (window.RESUME_DATA && window.RESUME_DATA.technologySummary && window.RESUME_DATA.technologySummary.titleText) ||
                             (window.RESUME_DATA && window.RESUME_DATA.sectionTitles && window.RESUME_DATA.sectionTitles.technologySummary);
         sideTitle.textContent = titleFromData || 'Tech Summary'; inner.appendChild(sideTitle);
-    // allow legacy roles map via window.TECH_ROLES or window.RESUME_DATA.techRoles, but prefer per-tag role embedded in the tag objects
-    var legacyRolesMap = window.TECH_ROLES || (window.RESUME_DATA && window.RESUME_DATA.techRoles) || {};
 
-    tech.forEach(function(cat){
+    // Render tech categories and tags. Per print requirement, do NOT include any role metadata for tags.
+    (tech || []).forEach(function(cat){
             var c = el('div','side-cat');
-            var h = el('h4'); h.textContent = cat.title; c.appendChild(h);
+            var h = el('h4'); h.textContent = cat.title || cat.name || ''; c.appendChild(h);
                 var ul = el('ul'); cat.tags.forEach(function(t){
                     var li = el('li');
                     var b = el('span','manual-bullet'); b.textContent = '\u2022';
                     var txt = el('span','manual-text');
                     var tagName = '';
-                    var roleForTag = null;
                     if(typeof t === 'string'){
                         tagName = t;
-                        roleForTag = legacyRolesMap[t] || null;
                     } else if(t && typeof t === 'object'){
                         tagName = t.name || '';
-                        roleForTag = t.role || legacyRolesMap[t.name] || null;
                     }
                     txt.textContent = tagName;
                     li.appendChild(b);
                     li.appendChild(txt);
-
-                    if(roleForTag){
-                        var roleWrap = el('span','tech-role-wrap');
-                        var sep = el('span','tech-role-sep'); sep.textContent = '  -  ';
-                        var role = el('span','tech-role'); role.textContent = roleForTag;
-                        roleWrap.appendChild(sep);
-                        roleWrap.appendChild(role);
-                        li.appendChild(roleWrap);
-                    }
-
                     ul.appendChild(li);
                 });
             c.appendChild(ul);
@@ -160,33 +154,7 @@
         }
 
         container.appendChild(layout);
-        // After layout is attached to DOM, adjust any role elements that wrapped to the next line.
-        // When a role wraps, we remove the separator and display the role on its own indented line.
-        setTimeout(function(){
-            try{
-                var side = container.querySelector('.pl-side');
-                if(side){
-                    var items = side.querySelectorAll('.side-cat li');
-                    items.forEach(function(li){
-                        var txt = li.querySelector('.manual-text');
-                        var roleWrap = li.querySelector('.tech-role-wrap');
-                        if(txt && roleWrap){
-                                    var txtRect = txt.getBoundingClientRect();
-                                    var roleRect = roleWrap.getBoundingClientRect();
-                                    // If the top of the role is lower than the top of the text, it wrapped to the next line.
-                                    if(roleRect.top > txtRect.top + 1){
-                                        var sep = roleWrap.querySelector('.tech-role-sep');
-                                        if(sep) sep.textContent = '';
-                                        roleWrap.classList.add('tech-role-wrapped');
-                                    } else {
-                                        // If role sits on the same line, mark it inline so CSS can absolutely position it
-                                        roleWrap.classList.add('tech-role-inline');
-                                    }
-                                }
-                    });
-                }
-            }catch(e){ /* ignore measurement errors */ }
-        }, 0);
+        // No role-specific layout adjustments required for the print output (roles are intentionally not rendered).
     }
 
     // expose function for embedding render into other pages
