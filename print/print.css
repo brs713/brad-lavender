@@ -34,9 +34,14 @@
 .pl-side .side-cat { margin-bottom: 0.06in; text-align: left; /* prevent splitting across pages when possible */ break-inside: avoid; page-break-inside: avoid; }
 .pl-side .side-cat h4 { font-size: 9pt; margin: 0 0 0.03in 0; font-weight: 600; }
 .pl-side .side-cat ul { margin: 0; padding-left: 0; font-size: 8.5pt; list-style: none; }
-.pl-side .side-cat li { display: flex; align-items: flex-start; font-size: 8.5pt; margin-bottom: 0.12rem; position: relative; }
-.manual-bullet { display: inline-block; width: 0.8rem; text-align: left; margin-right: 0.25rem; color: rgba(0,0,0,1); font-size: 8.5pt; line-height: 1; }
-.manual-text { display: inline-block; flex: 1 1 auto; position: relative; padding-right: 5.2rem; }
+/* Make each list item block-level so it cannot force the sidebar wider than the headings. */
+.pl-side .side-cat li { display: block; font-size: 8.5pt; margin-bottom: 0.12rem; position: relative; }
+.manual-bullet { display: inline-block; width: 0.8rem; text-align: left; margin-right: 0.25rem; color: rgba(0,0,0,1); font-size: 8.5pt; line-height: 1; vertical-align: top; }
+/* Allow tag text to wrap within the sidebar width so it doesn't expand the column; remove padding that previously reserved inline space. */
+.manual-text { display: inline-block; position: relative; padding-right: 0; white-space: normal; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
+
+/* Role metadata rendered after tag names in the print sidebar */
+.pr-role { font-style: italic; margin-left: 0.25rem; color: rgba(0,0,0,0.8); font-size: 8pt; }
 
 
 /* Career and job styles */
@@ -56,13 +61,3 @@
 .pr-personal .pr-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
 .pr-personal .pr-tag { display: inline-block; padding: 0.18rem 0.45rem; background: rgba(0,0,0,0.04); border-radius: 6px; font-size: 8.5pt; line-height: 1.2; }
 
-/* Role display next to technology names */
-.tech-role { font-style: italic; font-size: 8.5pt; color: rgba(0,0,0,0.8); }
-.tech-role-sep { color: rgba(0,0,0,0.8); }
-.tech-role-wrap { white-space: nowrap; }
-
-/* Inline roles: absolutely position inside the manual-text container so they don't expand sidebar width. */
-.tech-role-inline { position: absolute; right: 0; top: 50%; transform: translateY(-50%); white-space: nowrap; z-index: 1; }
-
-/* When JS detects the role wrapped to the next visual line, convert to block and indent to align under .manual-text */
-.tech-role-wrapped { display: block; white-space: normal; margin-left: calc(0.8rem + 0.25rem); /* same as bullet width + bullet margin */ }

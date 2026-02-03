@@ -86,7 +86,11 @@
                             (window.RESUME_DATA && window.RESUME_DATA.sectionTitles && window.RESUME_DATA.sectionTitles.technologySummary);
         sideTitle.textContent = titleFromData || 'Tech Summary'; inner.appendChild(sideTitle);
 
-    // Render tech categories and tags. Per print requirement, do NOT include any role metadata for tags.
+    // Render tech categories and tags. If a tag is an object with a `role` property
+    // render that role as an italicized span immediately after the tag text.
+    // This intentionally overrides the previous print-only rule to exclude role
+    // metadata because roles are stored in the canonical data source
+    // (`data/resume-data.js`) and were requested to be visible in print output.
     (tech || []).forEach(function(cat){
             var c = el('div','side-cat');
             var h = el('h4'); h.textContent = cat.title || cat.name || ''; c.appendChild(h);
@@ -100,9 +104,19 @@
                     } else if(t && typeof t === 'object'){
                         tagName = t.name || '';
                     }
-                    txt.textContent = tagName;
-                    li.appendChild(b);
-                    li.appendChild(txt);
+                    // Only render entries that have a non-empty name
+                    if(tagName && String(tagName).trim()){
+                        txt.textContent = tagName;
+                        li.appendChild(b);
+                        li.appendChild(txt);
+                        // If the tag object contains a role, append it as an
+                        // italicized span immediately after the tag text.
+                        if(t && typeof t === 'object' && t.role){
+                            var roleSpan = el('span','pr-role');
+                            roleSpan.textContent = String(t.role);
+                            li.appendChild(roleSpan);
+                        }
+                    }
                     ul.appendChild(li);
                 });
             c.appendChild(ul);
@@ -154,7 +168,6 @@
         }
 
         container.appendChild(layout);
-        // No role-specific layout adjustments required for the print output (roles are intentionally not rendered).
     }
 
     // expose function for embedding render into other pages
